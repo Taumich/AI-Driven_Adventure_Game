@@ -24,7 +24,7 @@ class Main{
 			turn ++;
 			if (turn >= 5) {
 				exit = true;
-				Say("Game Over!");
+				Say("Game Over!"); //to delete
 			}
 		}
 	}
