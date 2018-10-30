@@ -3,13 +3,12 @@ import java.util.Scanner;
 
 class Main{
 	
-	public static int[] coordinates = {2,2};
-	
 	public static void main (String[] args)
 	{
 		//Lokala variabler
 		boolean exit = false;
 		int turn = 0;
+		int[] coordinates = {2,2};
 		
 		Say("Welcome to Project P online! \nType something to interact");
 		
@@ -17,9 +16,18 @@ class Main{
 		while (exit == false)
 		{
 			
+			Say("Coordinates: " + coordinates[0] +","+ coordinates[1]);
 			Scanner s = new Scanner(System.in);
 			
-			Say(AI(s.nextLine()));
+			//answer
+			String[] answer = {AI(0,s.nextLine()), AI(1,s.nextLine()), AI(2,s.nextLine())};
+			
+			//new position
+			//coordinates[0] = AI
+			//coordinates[1] = AI
+			
+			//say answer
+			Say(answer[0]);
 			
 			turn ++;
 			if (turn >= 20) {
@@ -29,12 +37,70 @@ class Main{
 		}
 	}
 	
-	//world is used for movement vector calculations
-	private static String World(int action)
-	{
-		int[] present = coordinates;
+	private static String AI(int task, String answer) {
 		//Local variables
-		int[] 	nextVector 	= {0,0};
+		boolean equality = false;
+		String[] respons = {"","-","-"},
+		
+		//AI response library
+				responses = 
+		{	
+			"hey","wazapp",  "no plz","plz",  "bye","no way",  "why","that's why",  "beautiful","yes you are",
+			"ask me","are you crazy?",  "start","start what? Say start game to play",  "yes","amazing!",  "no","how sad",  "plz", "precisely!",
+			"are you smart?","very smart!",  "who are you?","I am your friend", "what's up?","not much bro", 
+			"hello","hey hey hey!",  "wazapp","wazapp boi",  "wazapp boi","hey that's my line!",  "start game","intializing..."
+		},
+				actions =
+		{
+			"up","took a step forward",   "down","took a step back",  "return","you can't return from here",
+			"right","you turn to the right",  "left","you turn to the left"
+		},
+				message = {"missing action"};
+		
+		//Ask for Task
+		for (int i=0; i <= (actions.length -1); i++) {
+			equality = new String(answer).equals(actions[i]);
+			
+			i++;
+			
+			if(equality) {
+				respons[0] = actions[i] + "\n You are now " + World( (i-1)/2 );
+				respons[1] = World(task, (i-1)/2 );
+				respons[2] = World(task, (i-1)/2 );
+				break;
+			}
+		}
+		
+		//return result
+		if (equality)
+			message = respons;
+		else
+		{
+			//Ask for Conversation
+			for (int i=0; i <= (responses.length -1); i++) {
+				
+				equality = new String(answer).equals(responses[i]);
+				
+				i++;
+				respons[0] = responses[i];
+				
+				if(equality)
+					break;
+			}
+			
+			if (equality)
+				message = respons;
+		}
+		
+		return message[task];
+	}
+	
+	//world is used for movement vector calculations
+	private static String[] World(int task, int action)
+	{
+		//Local variables
+		int[] 	present 	= {2,2},
+				nextVector 	= {0,0};
 		
 		if (action == 0) {
 			nextVector[0] = 0; nextVector[1] = 1;
@@ -52,11 +118,11 @@ class Main{
 		//Local variable for movement response
 		int[] motion = { nextVector[0], present[0], nextVector[1], present[1] };
 		
-		return Map(motion);
+		return Map(task, motion);
 	}
 	
 	//Map is used for storing map tiles and returning movement results
-	private static String Map(int action[])
+	private static String Map(int task, int action[])
 	{
 		String[] element = {"in an ocean", "on a beach", "in a djungle"};
 		
@@ -72,69 +138,18 @@ class Main{
 		{
 			coordinates[0] = action[1];
 			coordinates[1] = action[3];
-			return element[ tile[( action[0]+action[1] )][( action[2]+action[3] )] ];
+			String[] response = {
+									element[ tile[( action[0]+action[1] )][( action[2]+action[3] )] ],
+									action[0]+action[1]+"",
+									action[2]+action[3]+""
+								};
+			return response[task];
 		} else {
 			return "Error, illegal movement";
 		}
 	}
 	
-	private static String AI(String answer) {
-		//Local variables
-		boolean equality = false;
-		String respons = "";
-		
-		//AI response library
-		String[] responses = 
-		{	
-			"hey","wazapp",  "no plz","plz",  "bye","no way",  "why","that's why",  "beautiful","yes you are",
-			"ask me","are you crazy?",  "start","start what? Say start game to play",  "yes","amazing!",  "no","how sad",  "plz", "precisely!",
-			"are you smart?","very smart!",  "who are you?","I am your friend", "what's up?","not much bro", 
-			"hello","hey hey hey!",  "wazapp","wazapp boi",  "wazapp boi","hey that's my line!",  "start game","intializing..."
-		};
-		
-		String[] actions =
-		{
-			"up","took a step forward",   "down","took a step back",  "return","you can't return from here",
-			"right","you turn to the right",  "left","you turn to the left"
-		};
-		
-		//Ask for Task
-		for (int i=0; i <= (actions.length -1); i++) {
-			
-			equality = new String(answer).equals(actions[i]);
-			
-			i++;
-			
-			if(equality) {
-				respons = actions[i] + "\n You are now " + World( (i-1)/2 );
-				break;
-			}
-				
-		}
-		
-		//return result
-		if (equality)
-			return respons;
-		else
-		{
-			//Ask for Conversation
-			for (int i=0; i <= (responses.length -1); i++) {
-				
-				equality = new String(answer).equals(responses[i]);
-				
-				i++;
-				respons = responses[i];
-				
-				if(equality)
-					break;
-			}
-			
-			if (equality)
-				return respons;
-			else
-				return "missing answer to command";
-		}
-	}
+
 
 	private static void Say(String print) {
 		System.out.println(print);
