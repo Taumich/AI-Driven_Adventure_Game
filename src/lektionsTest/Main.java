@@ -1,7 +1,9 @@
 package lektionsTest;
-import java.util.Scanner;
+import java.util.*;
 
 class Main{
+	
+	static boolean devMode = true;
 	
 	public static void main (String[] args)
 	{
@@ -11,20 +13,31 @@ class Main{
 		int[] coordinates = {2,2};
 		
 		Say("Welcome to Project P online! \nType something to interact");
+		Scanner s = new Scanner(System.in);
 		
-		//Loop som kör RPG spelet hej 123
+		//Loop som kör RPG spelet
 		while (exit == false)
 		{
-			
-			Say("Coordinates: " + coordinates[0] +","+ coordinates[1]);
-			Scanner s = new Scanner(System.in);
+			Say("Coordinates: " + coordinates[0] +","+ coordinates[1], devMode);
 			
 			//answer
-			String[] answer = {AI(0,s.nextLine()), AI(1,s.nextLine()), AI(2,s.nextLine())};
+			String[] answer = AI(s.nextLine(), coordinates);
 			
-			//new position
-			//coordinates[0] = AI
-			//coordinates[1] = AI
+			if(new String(answer[1]).equals("x"))
+			{
+				
+			}
+			else if (new String(answer[2]).equals("x"))
+			{
+				
+			}
+			else
+			{
+				//new position
+				coordinates[0] = Integer.valueOf(answer[1]);
+				coordinates[1] = Integer.valueOf(answer[2]);
+			}
+			
 			
 			//say answer
 			Say(answer[0]);
@@ -37,7 +50,7 @@ class Main{
 		}
 	}
 	
-	private static String AI(int task, String answer) {
+	private static String[] AI(String answer, int[] coordinates) {
 		//Local variables
 		boolean equality = false;
 		String[] respons = {"","-","-"},
@@ -64,9 +77,7 @@ class Main{
 			i++;
 			
 			if(equality) {
-				respons[0] = actions[i] + "\n You are now " + World( (i-1)/2 );
-				respons[1] = World(task, (i-1)/2 );
-				respons[2] = World(task, (i-1)/2 );
+				respons = World( (i-1)/2 , coordinates );
 				break;
 			}
 		}
@@ -78,29 +89,24 @@ class Main{
 		{
 			//Ask for Conversation
 			for (int i=0; i <= (responses.length -1); i++) {
-				
 				equality = new String(answer).equals(responses[i]);
 				
 				i++;
 				respons[0] = responses[i];
-				
 				if(equality)
 					break;
 			}
-			
 			if (equality)
 				message = respons;
 		}
-		
-		return message[task];
+		return message;
 	}
 	
 	//world is used for movement vector calculations
-	private static String[] World(int task, int action)
+	private static String[] World(int action, int[] coordinates)
 	{
 		//Local variables
-		int[] 	present 	= {2,2},
-				nextVector 	= {0,0};
+		int[] 	nextVector 	= {0,0};
 		
 		if (action == 0) {
 			nextVector[0] = 0; nextVector[1] = 1;
@@ -115,14 +121,11 @@ class Main{
 			nextVector[0] = -1; nextVector[1] = 0;
 		}
 		
-		//Local variable for movement response
-		int[] motion = { nextVector[0], present[0], nextVector[1], present[1] };
-		
-		return Map(task, motion);
+		return Map(nextVector, coordinates);
 	}
 	
 	//Map is used for storing map tiles and returning movement results
-	private static String Map(int task, int action[])
+	private static String[] Map(int[] action, int[] coordinates)
 	{
 		String[] element = {"in an ocean", "on a beach", "in a djungle"};
 		
@@ -134,24 +137,32 @@ class Main{
 				{0,0,0,0,0}
 				};
 		
-		if(action[0]+action[1] <5 && action[2]+action[3] <5)
+		//bounds = true means inside of map
+		boolean xBounds = coordinates[0]+action[0] <5 || coordinates[0]+action[0] >0;
+		boolean yBounds = coordinates[1]+action[1] <5 || coordinates[1]+action[1] >0;
+		
+		if(xBounds && yBounds)
 		{
-			coordinates[0] = action[1];
-			coordinates[1] = action[3];
-			String[] response = {
-									element[ tile[( action[0]+action[1] )][( action[2]+action[3] )] ],
-									action[0]+action[1]+"",
-									action[2]+action[3]+""
+			String[] respons = {
+									element[ tile[( coordinates[0]+action[0] )][( coordinates[1]+action[1] )] ],
+									coordinates[0]+action[0]+"",
+									coordinates[1]+action[1]+""
 								};
-			return response[task];
+			return respons;
+		} else if (!xBounds) {
+			String[] respons = {"Error, illegal movement","x","0"};
+			return respons;
 		} else {
-			return "Error, illegal movement";
+			String[] respons = {"Error, illegal movement","0","x"};
+			return respons;
 		}
 	}
-	
-
 
 	private static void Say(String print) {
-		System.out.println(print);
+			System.out.println(print);
+	}
+	private static void Say(String print, boolean devMode) {
+		if(devMode)
+			System.out.println(print);
 	}
 }
