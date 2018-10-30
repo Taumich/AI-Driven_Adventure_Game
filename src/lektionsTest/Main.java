@@ -12,7 +12,7 @@ class Main{
 		
 		Say("Welcome to Project P online! \nType something to interact");
 		
-		//Loop som kör RPG spelet
+		//Loop som kör RPG spelet hej 123
 		while (exit == false)
 		{
 			
