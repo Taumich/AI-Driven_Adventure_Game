@@ -11,7 +11,7 @@ class Main{
 		boolean exit = false;
 		int turn = 0;
 		
-		Say("Welcome to Papegojja online!");
+		Say("Welcome to Project P online! \nType something to interact");
 		
 		//Loop som kör RPG spelet
 		while (exit == false)
@@ -22,7 +22,7 @@ class Main{
 			Say(AI(s.nextLine()));
 			
 			turn ++;
-			if (turn >= 5) {
+			if (turn >= 20) {
 				exit = true;
 				Say("Game Over!"); //to delete
 			}
@@ -58,7 +58,7 @@ class Main{
 	//Map is used for storing map tiles and returning movement results
 	private static String Map(int action[])
 	{
-		String[] element = {"ocean", "beach", "djungle"};
+		String[] element = {"in an ocean", "on a beach", "in a djungle"};
 		
 		int[][] tile = {
 				{0,0,0,0,0},
@@ -101,12 +101,12 @@ class Main{
 		//Ask for Task
 		for (int i=0; i <= (actions.length -1); i++) {
 			
-			equality = new String(answer).equals(responses[i]);
+			equality = new String(answer).equals(actions[i]);
 			
 			i++;
 			
 			if(equality) {
-				respons = actions[i] + "\n You see: " + World( (i-1)/2 );
+				respons = actions[i] + "\n You are now " + World( (i-1)/2 );
 				break;
 			}
 				
