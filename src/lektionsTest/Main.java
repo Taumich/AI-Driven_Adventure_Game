@@ -3,7 +3,7 @@ import java.util.*;
 
 class Main{
 	
-	static boolean devMode = true;
+	static boolean devMode = !true;
 	
 	public static void main (String[] args)
 	{
@@ -130,7 +130,7 @@ class Main{
 		else if (action == 4) {
 			nextVector[0] = -1; nextVector[1] = 0;
 		}
-		
+		Say("Trying to move by: "+nextVector[0]+","+nextVector[1], devMode);
 		return Map(nextVector, coordinates);
 	}
 	
@@ -140,16 +140,16 @@ class Main{
 		
 		String[] element = {"in an ocean", "on a beach", "in a djungle"};
 		int[] 	newloc = {coordinates[0]+action[0], coordinates[1]+action[1]};
-		boolean log = true;
+		boolean log = !true;
 		
-		Say("____Entered map", log && devMode);
+		Say("_____Entered map code_____",devMode);
 		
 		// y-coordinates: "up" = right on code, 
 		// x-coordinates: "right" = down on code
 		int[][] tile = 	{
 						{1,1,1,0,0},
-						{1,1,1,0,0,0},
-						{1,1,2,0,0,0}, //---> "up" = y-axis
+						{1,1,1,0,0,1},
+						{1,1,2,0,0,2}, //---> "up" = y-axis
 						{0,0,2,0,0},
 						{0,0,0,0,0}
 						};
@@ -159,54 +159,49 @@ class Main{
 		
 		int[][] y_length = new int[5][2]; //definition: y-length [tile number in y-axis] [min-val "0" or max-val "1" from this tile]
 		
-		Say("tile loop 0 to "+ (tile.length-1), log && devMode);
+		Say("  Initializing: tile loop 0 to "+ (tile.length-1), log && devMode);
 		
-		for (int i = 0; i <= tile.length -1; i++) {
-			int 	minVal = -1,
-					maxVal = -1;
-			
+		for (int i = 0; i < tile.length; i++)
+		{
+			//if tile not set:
 			if (y_length[i][1] == 0)
 			{
-				//check if in range
-				if (tile[i].length >= newloc[1]) {
-					
-					//set min-val
-					if (i==0)
-						y_length[i][0] = i;
-					else if (y_length[i-1][0] == -1)
-						y_length[i][0] = y_length[i-1][0];
-					
-					//find max-val from min-tile
-					for (int u = i; u <= tile.length; u++) {
-						Say("i="+i+" u="+u,log && devMode);
-						
-						if (tile[u].length >= newloc[1]) {
-							Say("found valid at: "+u, log && devMode);
-							y_length[u][0] = minVal; //min
-						}
-						else {
+				//check if y-axis in range
+				if (tile[i].length > newloc[1])
+				{
+					//find max-val
+					for (int u = i; u <= tile.length; u++) //loops one too much for final break code.
+					{
+						if (u < tile.length && tile[u].length > newloc[1])
+							Say("valid range at tile["+u+"].max="+(tile[u].length-1)+" newloc[1]="+newloc[1], log && devMode);
+						else
+						{
 							//set max-val to tile-group
-							for(int n=i; n < u; n++) {
-								Say("Setting y_length["+n+"][1] to "+(u-1));
+							for(int n=i; n < u; n++)
+							{
 								y_length[n][1] = u-1;
+								y_length[n][0] = i;
+								Say("Set y["+n+"]= {"+y_length[n][0]+"," +y_length[n][1]+"}", log && devMode);
 							}
 							break;
 						}
 					}
-				}
-				y_length[i][0] = minVal; //min
-				y_length[i][1] = maxVal; //max newloc[0]
+				} 
+				else //if out of range:
+					y_length[i][0] = y_length[i][1] = -1; 
 			}
-			Say("min: "+ y_length[i][0] +", max: "+ y_length[i][1]);
+			//else //if tile already set:
+				//Say("skipp i="+i, false);
+			
+			Say("y_length["+i+"]= {"+ y_length[i][0] +","+ y_length[i][1]+"}", devMode);
 		}
 		
 		//bounds = true means inside of map
-		Say("x.length = " + tile.length, log && devMode);
-		Say("y.length = " + tile[newloc[0]].length, log && devMode);
+		Say("xy-tile quantities = {"+tile.length+","+tile[newloc[0]].length+"}", devMode);
 		boolean xBounds = newloc[0] <tile.length && newloc[0] >-1;
 		boolean yBounds = newloc[1] <tile[newloc[0]].length && newloc[1] >-1;
 		
-		//Say("xBounds = " + xBounds + " yBounds = " + yBounds, devMode);
+		//Say("xBounds = " + xBounds + " yBounds = " + yBounds, log && devMode);
 		
 		if(xBounds && yBounds)
 		{
@@ -217,10 +212,10 @@ class Main{
 								};
 			return respons;
 		} else if (!xBounds) {
-			String[] respons = {"Error, illegal movement","x","0"};
+			String[] respons = {"A force stops you from moving there","x","0"};
 			return respons;
 		} else {
-			String[] respons = {"Error, illegal movement","0","x"};
+			String[] respons = {"A force stops you from moving there","0","x"};
 			return respons;
 		}
 	}
