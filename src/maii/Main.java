@@ -1,4 +1,6 @@
 package maii;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.*;
 
 class Main{
@@ -6,15 +8,14 @@ class Main{
 	static boolean devMode = !true;
 	static int turn = 0;
 	
-	public static void main (String[] args)
+	
+	public static void main (String[] args) throws FileNotFoundException
 	{
 		//Lokala variabler
-		
 		boolean exit = false;
 		int[] coordinates = {2,2};
 		
-		//AI_Speech aispeech = new AI_Speech();
-		//WorldCode worldcode = new WorldCode();
+		PrintWriter fout = new PrintWriter ("AI_Language.txt");
 		
 		Say("Welcome to Michael AI-initiative! \nType something to interact");
 		Scanner s = new Scanner(System.in);
@@ -30,7 +31,7 @@ class Main{
 			if(new String(answer[0]).equals("x"))
 			{
 				Say("Lacking response because of: " + answer[0], devMode);
-				answer[0] = "Sorry i don't understand that";
+				answer[0] = "Sorry i don't understand that\nPlease type what word that should trigger the desired response:";
 			}
 			else if(new String(answer[1]).equals("x"))
 			{
@@ -49,6 +50,14 @@ class Main{
 			
 			//say answer
 			Say(answer[0]);
+			
+			if(new String(answer[0]).equals("x")) {
+				fout.print ("{"+s.next()+",");
+				Say("now type what I should respond:");
+				fout.println(s.nextLine()+"}");
+			}
+			
+			fout.flush ();
 			
 			turn ++;
 			if (turn >= 10) {

@@ -2,10 +2,6 @@ package maii;
 
 public class WorldCode {
 	
-	//In here you will find the world code used to develop stuff that is cool
-	
-	//Main main = new Main();
-	
 	static boolean devMode = Main.devMode;
 	
 	//world is used for movement vector calculations
@@ -18,14 +14,11 @@ public class WorldCode {
 			
 			if (action == 0) {
 				nextVector[0] = 0; nextVector[1] = 1;
-			}
-			else if (action == 1) {
+			} else if (action == 1) {
 				nextVector[0] = 0; nextVector[1] = -1;
-			}
-			else if (action == 3) {
+			} else if (action == 3) {
 				nextVector[0] = 1; nextVector[1] = 0;
-			}
-			else if (action == 4) {
+			} else if (action == 4) {
 				nextVector[0] = -1; nextVector[1] = 0;
 			}
 			Say("Trying to move by: "+nextVector[0]+","+nextVector[1], devMode);
@@ -89,8 +82,6 @@ public class WorldCode {
 					else //if out of range:
 						y_length[i][0] = y_length[i][1] = -1; 
 				}
-				//else //if tile already set:
-					//Say("skipp i="+i, false);
 				
 				Say("y_length["+i+"]= {"+ y_length[i][0] +","+ y_length[i][1]+"}", devMode);
 			}
