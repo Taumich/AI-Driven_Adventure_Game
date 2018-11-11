@@ -7,13 +7,13 @@ public class AI_Speech {
 	public static String[] AI(String answer, int[] coordinates)
 	{
 		answer = answer.toLowerCase();
-		answer = answer.replaceAll("[\\-\\+\\.\\^:,]","");
+		answer = answer.replaceAll("[\\-\\+\\.\\^:,?!]","");
 		String[] aword = answer.split("\\s+");
 		
 		//Local variables
 		boolean equality = false,
 				log = true;
-		String[] respons = {"temp","x","x"};
+		String[] respons = {"x","x","x"};
 		//AI response library
 		
 		String[][] responses[] = 
@@ -26,10 +26,13 @@ public class AI_Speech {
 							{"Greetings!", "Hello good sir!"}
 					},{	{"heyo","yo","wazaa","wazzapp"},
 							{"Heyo!", "Bruh wazaaap!", "yo!"}
-					},{	{"yes","y","positive","yez","ye"},
+					},{	{"yes","y","positive","affirmative","yez","ye","aye"},
 							{"That's great!","Amazing!","Splendid!","Excellent!","Superb!","Marvelous!"},
 							{"+"}
-					},{	{"why","how","how come","why so"},
+					},{	{"no","n","negative","nah","nope","nop"},
+						{"How sad","Oh","Meh","Aww, too bad"},
+						{"-"}
+					},{	{"why","how"},
 							{"That's why!", "No idea", "Why you asking me?"},
 							{"?"}
 					},{	{"beautiful","pretty","amazing","lovely","splendid"},

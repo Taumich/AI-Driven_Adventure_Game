@@ -49,7 +49,7 @@ public class WorldCode {
 					//    v
 					// "right" = x-axis
 			
-			int[][] y_length = new int[5][2]; //definition: y-length [tile number in y-axis] [min-val "0" or max-val "1" from this tile]
+			int[][] y_length = new int[tile.length][2]; //definition: y-length [tile number in y-axis] [min-val "0" or max-val "1" from this tile]
 			
 			Say("  Initializing: tile loop 0 to "+ (tile.length-1), log && devMode);
 			

@@ -5,7 +5,7 @@ import java.util.*;
 
 class Main{
 	
-	static boolean devMode = !true;
+	static boolean devMode = true;
 	static int turn = 0;
 	
 	
@@ -50,12 +50,12 @@ class Main{
 			
 			//say answer
 			Say(answer[0]);
-			
+			/*
 			if(new String(answer[0]).equals("x")) {
 				fout.print ("{"+s.next()+",");
 				Say("now type what I should respond:");
 				fout.println(s.nextLine()+"}");
-			}
+			}//*/
 			
 			fout.flush ();
 			
@@ -63,6 +63,7 @@ class Main{
 			if (turn >= 10) {
 				exit = true;
 				Say("Game Over!"); //to delete
+				System.exit(0);
 			}
 		}	
 	}
